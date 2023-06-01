@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 //template <typename T>
 class Sorter {
@@ -14,42 +15,57 @@ public:
     Sorter(int size){
         capacity = size;
         vec = std::vector<int>(capacity);
+        vec_reset = std::vector<int>(capacity);
     }
 
     void bubble_sort(){
-        std::cout << "Hello\n";
-        assert(true);
+        std::cout << "Bubble Sort Average O(n^2)\n";
+        for(int i = 0; i < vec.size()-1; i++){
+            bool swapped = false;
+            for(int j = 0; j < vec.size()-1; j++){
+                if(vec[j] > vec[j+1]){
+                    swap(vec[j], vec[j+1]);
+                    swapped = true;
+                }
+            }
+            if(!swapped) break;
+        }
     }
 
     void heap_sort(){
         std::cout << "Hello\n";
-        assert(true);
     }
 
     void insertion_sort(){
-        std::cout << "Hello\n";
-        assert(true);
+        std::cout << "Insertion Sort Average O(n^2)\n";
+        int j, recent;
+        for(int i = 1; i < vec.size(); i++){
+            j = i-1;
+            recent = vec[j+1];
+            while(j>-1 && recent < vec[j]){
+                swap(vec[j], vec[j+1]);
+                j--;
+            }
+        }
     }
 
     void merge_sort(){
         std::cout << "Hello\n";
-        assert(true);
     }
 
     void quick_sort(){
         std::cout << "Hello\n";
-        assert(true);
     }
 
     void selection_sort(){
         std::cout << "Hello\n";
-        assert(true);
     }
 
     void print(){
         for(int i : vec){
             std::cout << i << " ";
         }
+        std::cout << "\n";
     }
 
     void randomize(){
@@ -57,11 +73,28 @@ public:
         for(int i = 0; i < capacity; i++){
             this->vec[i] = (rand() % 100) + 1;
         }
+        vec_reset = vec;
+    }
+
+    void built_in_sort(){
+        std::cout << "Hello\n";
+        std::sort(vec.begin(), vec.end());
+    }
+
+    void reset(){
+        vec = vec_reset;
     }
 
 private:
     std::vector<int> vec;
     int capacity = 0;
+    std::vector<int> vec_reset;
+
+    void swap(int & a, int & b){
+        int temp = a;
+        a = b;
+        b = temp;
+    }
 };
 
 #endif
