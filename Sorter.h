@@ -61,11 +61,11 @@ public:
         std::cout << "Hello\n";
     }
 
-    void print(){
+    void print(std::ostream &os){
         for(int i : vec){
-            std::cout << i << " ";
+            os << i << " ";
         }
-        std::cout << "\n";
+        os << "\n";
     }
 
     void randomize(){
@@ -77,7 +77,7 @@ public:
     }
 
     void built_in_sort(){
-        std::cout << "Hello\n";
+        std::cout << "Testing Built in Sort (Quicksort)\n";
         std::sort(vec.begin(), vec.end());
     }
 

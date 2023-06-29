@@ -2,17 +2,17 @@
 
 int main(){
     Sorter sort(50);
-    sort.print();
+    sort.print(std::cout);
     sort.randomize();
-    sort.print();
+    sort.print(std::cout);
     sort.built_in_sort();
-    sort.print();
+    sort.print(std::cout);
     sort.reset();
     sort.bubble_sort();
-    sort.print();
+    sort.print(std::cout);
     sort.reset();
     sort.insertion_sort();
-    sort.print();
+    sort.print(std::cout);
 
     // sort.insertion_sort();
     // sort.merge_sort();

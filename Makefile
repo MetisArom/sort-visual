@@ -9,6 +9,9 @@ CXXFLAGS = -Wall -Werror -pedantic -g --std=c++11 -Wno-sign-compare -Wno-comment
 driver.exe: driver.cpp Sorter.h
 	$(CXX) $(CXXFLAGS) driver.cpp -o $@
 
+Sorter_tests.exe: Sorter_tests.cpp Sorter.h
+	$(CXX) $(CXXFLAGS) $< -o $@
+
 # disable built-in rules
 .SUFFIXES:
 
