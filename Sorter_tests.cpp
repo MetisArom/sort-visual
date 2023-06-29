@@ -47,11 +47,12 @@ TEST(test_insertion_sort){
 TEST(test_merge_sort){
     Sorter sort(50);
     sort.randomize();
+    std::vector<int> merge_vec_test = sort.return_vec();
     sort.built_in_sort();
     std::ostringstream oss_built_in_sort;
     sort.print(oss_built_in_sort);
     sort.reset();
-    sort.merge_sort();
+    sort.merge_sort(merge_vec_test, 0, merge_vec_test.size()-1);
     std::ostringstream oss_merge_sort;
     sort.print(oss_merge_sort);
 

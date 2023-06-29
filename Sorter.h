@@ -19,7 +19,7 @@ public:
     }
 
     void bubble_sort(){
-        std::cout << "Bubble Sort Average O(n^2)\n";
+        std::cout << "Bubble Sort O(n^2)\n";
         for(int i = 0; i < vec.size()-1; i++){
             bool swapped = false;
             for(int j = 0; j < vec.size()-1; j++){
@@ -37,7 +37,7 @@ public:
     }
 
     void insertion_sort(){
-        std::cout << "Insertion Sort Average O(n^2)\n";
+        std::cout << "Insertion Sort O(n^2)\n";
         int j, recent;
         for(int i = 1; i < vec.size(); i++){
             j = i-1;
@@ -49,8 +49,20 @@ public:
         }
     }
 
-    void merge_sort(){
-        std::cout << "Hello\n";
+    void merge_sort(std::vector<int>& merge_vector, int l, int r){
+        if(r+1-l == 50){
+            std::cout << "Merge Sort O(nlog(n))\n";
+        }
+        if(l < r){
+            int m = (l + (r-1))/2;
+            //sort left = arr[l to m]
+            merge_sort(merge_vector, l, m);
+            //sort right = arr[m to r]
+            merge_sort(merge_vector, m+1, r);
+
+            //put all stuff together using helper
+            merge(merge_vector, l, m, r);
+        }
     }
 
     void quick_sort(){
@@ -85,6 +97,10 @@ public:
         vec = vec_reset;
     }
 
+    std::vector<int> return_vec(){
+        return vec;
+    }
+
 private:
     std::vector<int> vec;
     int capacity = 0;
@@ -94,6 +110,50 @@ private:
         int temp = a;
         a = b;
         b = temp;
+    }
+
+    void merge(std::vector<int>& merge_vector, int l, int m, int r){
+        //indexes
+        int i,j,k;
+        //sizes
+        int size_left = m-l+1;
+        int size_right = r - m;
+        //create left and right vectors
+        std::vector<int> left, right;
+
+        for(i=0; i<size_left; i++){
+            left.push_back(merge_vector[l+i]);
+        }
+        for(j=0; j<size_right; j++){
+            right.push_back(merge_vector[m+1+j]);
+        }
+
+        //then put together the sorted vectors together
+        i=0,j=0;
+        k=l;
+        while(i < size_left && j < size_right){
+            if(left[i] <= right[j]){
+                merge_vector[k] = left[i];
+                i++;
+            }
+            else{
+                merge_vector[k] = right[j];
+                j++;
+            }
+            k++;
+        }
+
+        //them continue until sizes are used up
+        while(i < size_left){
+            merge_vector[k] = left[i];
+            i++; k++;
+        }
+        while(j < size_right){
+            merge_vector[k] = right[j];
+            j++; k++;
+        }
+
+        vec = merge_vector;
     }
 };
 
