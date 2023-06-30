@@ -21,8 +21,10 @@ int main(){
     sort.merge_sort(merge_vec, 0, 49);
     sort.print(std::cout);
 
-    // sort.insertion_sort();
-    // sort.merge_sort();
+    sort.reset();
+    sort.selection_sort();
+    sort.print(std::cout);
+
     // sort.quick_sort();
     // sort.selection_sort();
     // sort.heap_sort();

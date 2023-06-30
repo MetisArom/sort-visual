@@ -69,8 +69,17 @@ public:
         std::cout << "Hello\n";
     }
 
-    void selection_sort(){
-        std::cout << "Hello\n";
+    void selection_sort(){ //min weighted
+        std::cout << "Selection Sort O(n^2)\n";
+        for(int i = 0; i < vec.size(); i++){
+            int min_idx = i;
+            for(int j = i; j < vec.size(); j++){
+                if(vec[j] < vec[min_idx]){
+                    min_idx = j;
+                }
+            }
+            swap(vec[i],vec[min_idx]);
+        }
     }
 
     void print(std::ostream &os){
