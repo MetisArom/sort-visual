@@ -28,9 +28,5 @@ int main(){
     sort.quick_sort(0, 49);
     sort.print(std::cout);
 
-    // sort.quick_sort();
-    // sort.selection_sort();
-    // sort.heap_sort();
-
     return 0;
 }

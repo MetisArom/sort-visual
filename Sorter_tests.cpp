@@ -16,20 +16,6 @@ TEST(test_bubble_sort){
     ASSERT_TRUE(oss_built_in_sort.str() == oss_bubble_sort.str());
 }
 
-TEST(test_heap_sort){
-    Sorter sort(50);
-    sort.randomize();
-    sort.built_in_sort();
-    std::ostringstream oss_built_in_sort;
-    sort.print(oss_built_in_sort);
-    sort.reset();
-    sort.heap_sort();
-    std::ostringstream oss_heap_sort;
-    sort.print(oss_heap_sort);
-
-    ASSERT_TRUE(oss_built_in_sort.str() == oss_heap_sort.str());
-}
-
 TEST(test_insertion_sort){
     Sorter sort(50);
     sort.randomize();

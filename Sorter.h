@@ -37,13 +37,6 @@ public:
 
     // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
     // MODIFIES : this->vec (nonstatic member)
-    // EFFECTS  : Sorts vector using heap sort technique ...
-    void heap_sort(){
-        std::cout << "Hello\n";
-    }
-
-    // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
-    // MODIFIES : this->vec (nonstatic member)
     // EFFECTS  : Sorts vector using insertion sort technique w/ swap helper function
     void insertion_sort(){
         std::cout << "Insertion Sort O(n^2)\n";
