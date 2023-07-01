@@ -61,24 +61,30 @@ public:
     // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
     // MODIFIES : this->vec (nonstatic member)
     // EFFECTS  : Sorts vector using merge sort technique w/ merge helper function
-    void merge_sort(std::vector<int>& merge_vector, int l, int r){
+    void merge_sort(int l, int r){
         if(r+1-l == 50){std::cout << "Merge Sort O(nlog(n))\n";}
 
         if(l < r){
             int m = (l + (r-1))/2;
 
-            merge_sort(merge_vector, l, m);
-            merge_sort(merge_vector, m+1, r);
+            merge_sort(l, m);
+            merge_sort(m+1, r);
 
-            merge(merge_vector, l, m, r);
+            merge(l, m, r);
         }
     }
 
     // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
     // MODIFIES : this->vec (nonstatic member)
     // EFFECTS  : Sorts vector using quicksort technique ...
-    void quick_sort(){
-        std::cout << "Hello\n";
+    void quick_sort(int low, int high){
+        if(high-low+1 == capacity){std::cout << "Quicksort O(nlog(n))\n";}
+        if(low < high){
+            int partition_idx = partition(low, high);
+
+            quick_sort(low, partition_idx-1);
+            quick_sort(partition_idx+1, high);
+        }
     }
 
     // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
@@ -137,15 +143,15 @@ public:
 
     // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
     // MODIFIES : None
-    // EFFECTS  : Returns the Sorter's vector, used in merge sort implementation
+    // EFFECTS  : Returns the Sorter's vector
     std::vector<int> return_vec(){
         return vec;
     }
 
 private:
     std::vector<int> vec;
-    int capacity = 0;
     std::vector<int> vec_reset;
+    int capacity = 0;
 
     // REQUIRES : Two separate references
     // MODIFIES : a, b
@@ -159,9 +165,9 @@ private:
     }
 
     // REQUIRES : Valid call from merge_sort with left bound, middle, amd right bound indexes
-    // MODIFIES : this->vec (nonstatic member), merge_vector
-    // EFFECTS  : Uses subvectors of merge_vector to this-> vec sort using two pointer method
-    void merge(std::vector<int>& merge_vector, int l, int m, int r){
+    // MODIFIES : this->vec (nonstatic member)
+    // EFFECTS  : Uses subvectors of vec to sort and combine into vec using two pointer method
+    void merge(int l, int m, int r){
         int i,j,k; //indexes
         
         int size_left = m-l+1;
@@ -170,36 +176,53 @@ private:
         std::vector<int> left, right;
 
         for(i=0; i<size_left; i++){
-            left.push_back(merge_vector[l+i]);
+            left.push_back(vec[l+i]);
         }
         for(j=0; j<size_right; j++){
-            right.push_back(merge_vector[m+1+j]);
+            right.push_back(vec[m+1+j]);
         }
 
         i=0, j=0, k=l;
         
         while(i < size_left && j < size_right){
             if(left[i] <= right[j]){
-                merge_vector[k] = left[i];
+                vec[k] = left[i];
                 i++;
             }
             else{
-                merge_vector[k] = right[j];
+                vec[k] = right[j];
                 j++;
             }
             k++;
         }
 
         while(i < size_left){
-            merge_vector[k] = left[i];
+            vec[k] = left[i];
             i++; k++;
         }
         while(j < size_right){
-            merge_vector[k] = right[j];
+            vec[k] = right[j];
             j++; k++;
         }
+    }
 
-        vec = merge_vector;
+    // REQUIRES : Valid call from quick_sort with low index and high index
+    // MODIFIES : this->vec (nonstatic member), partition_idx in func quick_sort()
+    // EFFECTS  : Sets pivot to value at highest index, swaps elements lower than
+    //            the pivot value with iterator i until iterator j has fully travered.
+    //            Then, pivot is sorted at index i+1, which is returned as the index of
+    //            partition in the recursive calls in the parent quick_sort function.
+    int partition(int low, int high){
+        int pivot = vec[high];
+        int i = low-1;
+        for(int j = low; j < high; j++){
+            if(vec[j] < pivot){
+                i++;
+                swap(vec[i], vec[j]);
+            }
+        }
+        swap(vec[i+1], vec[high]);
+        return (i+1);
     }
 };
 
