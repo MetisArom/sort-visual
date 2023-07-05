@@ -5,17 +5,27 @@
 #include <vector>
 #include <algorithm>
 
-const int SCREEN_WIDTH=720;
-const int SCREEN_HEIGHT=480;
+const int SCREEN_WIDTH= 1000;
+const int SCREEN_HEIGHT= 500;
 
 SDL_Window* window=NULL;
 SDL_Renderer* renderer=NULL;
 
 const int rectSize=4;
 const int capacity = 100;
-bool complete = false;
 std::vector<int> vec(capacity);
 std::vector<int> vec_reset(capacity);
+
+// REQUIRES : Two separate references
+// MODIFIES : a, b
+// EFFECTS  : Swaps elements by reference using a temp variable 
+void swap(int & a, int & b){
+    if(&a != &b){
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+}
 
 // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
 // MODIFIES : vec
@@ -50,6 +60,48 @@ void insertion_sort(){
     }
 }
 
+// REQUIRES : Valid call from merge_sort with left bound, middle, amd right bound indexes
+// MODIFIES : this->vec (nonstatic member)
+// EFFECTS  : Uses subvectors of vec to sort and combine into vec using two pointer method
+void merge(int l, int m, int r){
+    int i,j,k; //indexes
+    
+    int size_left = m-l+1;
+    int size_right = r - m;
+    
+    std::vector<int> left, right;
+
+    for(i=0; i<size_left; i++){
+        left.push_back(vec[l+i]);
+    }
+    for(j=0; j<size_right; j++){
+        right.push_back(vec[m+1+j]);
+    }
+
+    i=0, j=0, k=l;
+    
+    while(i < size_left && j < size_right){
+        if(left[i] <= right[j]){
+            vec[k] = left[i];
+            i++;
+        }
+        else{
+            vec[k] = right[j];
+            j++;
+        }
+        k++;
+    }
+
+    while(i < size_left){
+        vec[k] = left[i];
+        i++; k++;
+    }
+    while(j < size_right){
+        vec[k] = right[j];
+        j++; k++;
+    }
+}
+
 // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
 // MODIFIES : vec
 // EFFECTS  : Sorts vector using merge sort technique w/ merge helper function
@@ -64,6 +116,25 @@ void merge_sort(int l, int r){
 
         merge(l, m, r);
     }
+}
+
+// REQUIRES : Valid call from quick_sort with low index and high index
+// MODIFIES : this->vec (nonstatic member), partition_idx in func quick_sort()
+// EFFECTS  : Sets pivot to value at highest index, swaps elements lower than
+//            the pivot value with iterator i until iterator j has fully travered.
+//            Then, pivot is sorted at index i+1, which is returned as the index of
+//            partition in the recursive calls in the parent quick_sort function.
+int partition(int low, int high){
+    int pivot = vec[high];
+    int i = low-1;
+    for(int j = low; j < high; j++){
+        if(vec[j] < pivot){
+            i++;
+            swap(vec[i], vec[j]);
+        }
+    }
+    swap(vec[i+1], vec[high]);
+    return (i+1);
 }
 
 // REQUIRES : Initialized Sorter and the member function randomize to fill the vector
@@ -112,7 +183,7 @@ void print(std::ostream &os){
 void randomize(){
     srand (time(NULL));
     for(int i = 0; i < capacity; i++){
-        vec[i] = (rand() % 100) + 1;
+        vec[i] = (rand() % 200) + 5;
     }
     vec_reset = vec;
 }
@@ -140,87 +211,15 @@ std::vector<int> return_vec(){
     return vec;
 }
 
-// REQUIRES : Two separate references
-// MODIFIES : a, b
-// EFFECTS  : Swaps elements by reference using a temp variable 
-void swap(int & a, int & b){
-    if(&a != &b){
-        int temp = a;
-        a = b;
-        b = temp;
-    }
-}
-
-// REQUIRES : Valid call from merge_sort with left bound, middle, amd right bound indexes
-// MODIFIES : this->vec (nonstatic member)
-// EFFECTS  : Uses subvectors of vec to sort and combine into vec using two pointer method
-void merge(int l, int m, int r){
-    int i,j,k; //indexes
-    
-    int size_left = m-l+1;
-    int size_right = r - m;
-    
-    std::vector<int> left, right;
-
-    for(i=0; i<size_left; i++){
-        left.push_back(vec[l+i]);
-    }
-    for(j=0; j<size_right; j++){
-        right.push_back(vec[m+1+j]);
-    }
-
-    i=0, j=0, k=l;
-    
-    while(i < size_left && j < size_right){
-        if(left[i] <= right[j]){
-            vec[k] = left[i];
-            i++;
-        }
-        else{
-            vec[k] = right[j];
-            j++;
-        }
-        k++;
-    }
-
-    while(i < size_left){
-        vec[k] = left[i];
-        i++; k++;
-    }
-    while(j < size_right){
-        vec[k] = right[j];
-        j++; k++;
-    }
-}
-
-// REQUIRES : Valid call from quick_sort with low index and high index
-// MODIFIES : this->vec (nonstatic member), partition_idx in func quick_sort()
-// EFFECTS  : Sets pivot to value at highest index, swaps elements lower than
-//            the pivot value with iterator i until iterator j has fully travered.
-//            Then, pivot is sorted at index i+1, which is returned as the index of
-//            partition in the recursive calls in the parent quick_sort function.
-int partition(int low, int high){
-    int pivot = vec[high];
-    int i = low-1;
-    for(int j = low; j < high; j++){
-        if(vec[j] < pivot){
-            i++;
-            swap(vec[i], vec[j]);
-        }
-    }
-    swap(vec[i+1], vec[high]);
-    return (i+1);
-}
-
 bool launch(){
-    if(SDL_Init(SDL_INIT_VIDEO < 0)){
+    if(SDL_Init(SDL_INIT_EVERYTHING < 0)){
         std::cout << "SDL could not be initialized" << SDL_GetError() << "\n";
         return false;
     }
     else{
-        std::cout << "SDL video is read to go \n";
+        std::cout << "SDL is read to go \n";
         window = SDL_CreateWindow("My Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                              SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+                              SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
         if ( window == NULL ) {
             std::cout << "Window could not be created: " << SDL_GetError() << "\n";
             return false;
@@ -252,15 +251,27 @@ int main(int argc, char** argv){
 
     SDL_Event windowEvent;
 
+    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    
+    randomize();
+    int i = 50;
+    for(int j = 0; j < vec.size(); j++){
+        SDL_Rect rect={i+50, 300, rectSize, vec[j]*-1};
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        i+=rectSize*2;
+        SDL_Delay(10);
+        SDL_RenderPresent(renderer);
+    }
+
     while(true){
         if(SDL_PollEvent (&windowEvent)){
             if(SDL_QUIT == windowEvent.type){
                 break;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
     }
     
     // print(std::cout);
