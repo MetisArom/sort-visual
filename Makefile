@@ -4,13 +4,13 @@
 CXX ?= g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Werror -pedantic -g --std=c++11 -Wno-sign-compare -Wno-comment -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
+#CXXFLAGS = -Wall -Werror -pedantic -g --std=c++11 -Wno-sign-compare -Wno-comment -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
 
 driver.exe: driver.cpp Sorter.h
-	$(CXX) $(CXXFLAGS) driver.cpp -I"include" -L"lib" -lSDL2main -lSDL2 -lSDL2_image -o $@
+	$(CXX) driver.cpp -I .src/include -L .src/lib -lmingw32 -lSDL2main -lSDL2 -o $@
 
 Sorter_tests.exe: Sorter_tests.cpp Sorter.h
-	$(CXX) $(CXXFLAGS) $< -o $@
+	$(CXX) $< -o $@
 
 # disable built-in rules
 .SUFFIXES:
