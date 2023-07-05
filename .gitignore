@@ -66,6 +66,9 @@ Icon
 *.lock
 *.swp
 
+#SDL2 src files
+.src/
+
 
 ########################################
 ## Xcode
