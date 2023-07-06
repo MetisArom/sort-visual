@@ -19,6 +19,34 @@ std::vector<int> vec_reset(capacity);
 // REQUIRES : Two separate references
 // MODIFIES : a, b
 // EFFECTS  : Swaps elements by reference using a temp variable 
+void drawVector(int idx1=-1, int idx2=-1, int idx3=-1){
+    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    
+    int i = 50;
+    
+    for(int j = 0; j < vec.size(); j++){
+        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
+        if(j == idx1 || j == idx2){
+            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+        }
+        else if(j == idx3){
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+            SDL_RenderFillRect(renderer, &rect);
+        }
+        else{
+            SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+            SDL_RenderDrawRect(renderer, &rect);
+        }
+        i+=rectSize*2;
+    }
+    SDL_RenderPresent(renderer);
+}
+
+// REQUIRES : Two separate references
+// MODIFIES : a, b
+// EFFECTS  : Swaps elements by reference using a temp variable 
 void swap(int & a, int & b){
     if(&a != &b){
         int temp = a;
@@ -38,6 +66,12 @@ void bubble_sort(){
             if(vec[j] > vec[j+1]){
                 swap(vec[j], vec[j+1]);
                 swapped = true;
+                drawVector(i, j);
+                SDL_Delay(1);
+            }
+            else{
+                drawVector(i, j);
+                SDL_Delay(1);
             }
         }
         if(!swapped) break;
@@ -55,6 +89,8 @@ void insertion_sort(){
         recent = vec[j+1];
         while(j>-1 && recent < vec[j]){
             swap(vec[j], vec[j+1]);
+            drawVector(i, j);
+            SDL_Delay(5);
             j--;
         }
     }
@@ -83,10 +119,14 @@ void merge(int l, int m, int r){
     while(i < size_left && j < size_right){
         if(left[i] <= right[j]){
             vec[k] = left[i];
+            drawVector(i+l, j+m+1, k);
+            SDL_Delay(20);
             i++;
         }
         else{
             vec[k] = right[j];
+            drawVector(i+l, j+m+1, k);
+            SDL_Delay(20);
             j++;
         }
         k++;
@@ -94,10 +134,14 @@ void merge(int l, int m, int r){
 
     while(i < size_left){
         vec[k] = left[i];
+        drawVector(k, i+l);
+        SDL_Delay(20);
         i++; k++;
     }
     while(j < size_right){
         vec[k] = right[j];
+        drawVector(k, j+m+1);
+        SDL_Delay(20);
         j++; k++;
     }
 }
@@ -106,7 +150,7 @@ void merge(int l, int m, int r){
 // MODIFIES : vec
 // EFFECTS  : Sorts vector using merge sort technique w/ merge helper function
 void merge_sort(int l, int r){
-    if(r+1-l == 50){std::cout << "Merge Sort O(nlog(n))\n";}
+    if(r+1-l == capacity){std::cout << "Merge Sort O(nlog(n))\n";}
 
     if(l < r){
         int m = (l + (r-1))/2;
@@ -131,9 +175,13 @@ int partition(int low, int high){
         if(vec[j] < pivot){
             i++;
             swap(vec[i], vec[j]);
+            drawVector(i,j,high);
+            SDL_Delay(20);
         }
     }
     swap(vec[i+1], vec[high]);
+    drawVector(-1,i+1,high);
+    SDL_Delay(20);
     return (i+1);
 }
 
@@ -161,6 +209,8 @@ void selection_sort(){
             if(vec[j] < vec[min_idx]){
                 min_idx = j;
             }
+            drawVector(i, j);
+            SDL_Delay(1);
         }
         swap(vec[i],vec[min_idx]);
     }
@@ -249,35 +299,15 @@ int main(int argc, char** argv){
 
     SDL_Event windowEvent;
 
-    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    
     randomize();
     
     // represents introduction of vector that is to be sorted
-    int i = 50;
-    for(int j = 0; j < vec.size(); j++){
-        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderDrawRect(renderer, &rect);
-        i+=rectSize*2;
-        SDL_Delay(30);
-        SDL_RenderPresent(renderer);
-    }
+    drawVector();
+    SDL_Delay(1000);
 
-    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
-    SDL_RenderClear(renderer);
-    bubble_sort();
+    quick_sort(0, 99);
 
-    i = 50;
-    for(int j = 0; j < vec.size(); j++){
-        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderDrawRect(renderer, &rect);
-        i+=rectSize*2;
-        SDL_Delay(30);
-        SDL_RenderPresent(renderer);
-    }
+    drawVector();
 
     /* Steps to Visualize:
     Must show swaps in real time to show algorithm's progression
