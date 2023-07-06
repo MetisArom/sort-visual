@@ -305,9 +305,35 @@ int main(int argc, char** argv){
     drawVector();
     SDL_Delay(1000);
 
-    quick_sort(0, 99);
+    bubble_sort();
 
     drawVector();
+    SDL_Delay(1000);
+    reset();
+
+    insertion_sort();
+
+    drawVector();
+    SDL_Delay(1000);
+    reset();
+
+    selection_sort();
+
+    drawVector();
+    SDL_Delay(1000);
+    reset();
+
+    merge_sort(0, capacity-1);
+
+    drawVector();
+    SDL_Delay(1000);
+    reset();
+
+    quick_sort(0, capacity-1);
+
+    drawVector();
+    SDL_Delay(1000);
+    reset();
 
     /* Steps to Visualize:
     Must show swaps in real time to show algorithm's progression
