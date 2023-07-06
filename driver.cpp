@@ -1,17 +1,19 @@
-#include <SDL2/SDL.h>
-#include <iostream>
-#include <cassert>
-#include <cmath>
-#include <vector>
-#include <algorithm>
+#include "globals.h"
 
 const int SCREEN_WIDTH= 1000;
 const int SCREEN_HEIGHT= 500;
+SDL_Rect resetBtn = {115, 420, 75, 50};
+SDL_Rect randomizeBtn = {226, 420, 75, 50};
+SDL_Rect bubblesortBtn = {338, 420, 75, 50};
+SDL_Rect insertionsortBtn = {449, 420, 75, 50};
+SDL_Rect selectionsortBtn = {561, 420, 75, 50};
+SDL_Rect mergesortBtn = {672, 420, 75, 50};
+SDL_Rect quicksortBtn = {784, 420, 75, 50};
 
 SDL_Window* window=NULL;
 SDL_Renderer* renderer=NULL;
 
-const int rectSize=4;
+const int rectWidth=4;
 const int capacity = 100;
 std::vector<int> vec(capacity);
 std::vector<int> vec_reset(capacity);
@@ -19,14 +21,14 @@ std::vector<int> vec_reset(capacity);
 // REQUIRES : Two separate references
 // MODIFIES : a, b
 // EFFECTS  : Swaps elements by reference using a temp variable 
-void drawVector(int idx1=-1, int idx2=-1, int idx3=-1){
+void drawVector(int idx1=-1, int idx2=-1, int idx3=-1, bool delay = false){
     SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
     SDL_RenderClear(renderer);
     
     int i = 50;
     
     for(int j = 0; j < vec.size(); j++){
-        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
+        SDL_Rect rect={i+50, 400, rectWidth, vec[j]*-1};
         if(j == idx1 || j == idx2){
             SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
             SDL_RenderFillRect(renderer, &rect);
@@ -39,8 +41,27 @@ void drawVector(int idx1=-1, int idx2=-1, int idx3=-1){
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             SDL_RenderDrawRect(renderer, &rect);
         }
-        i+=rectSize*2;
+        i+=rectWidth*2;
+        if(delay){
+            SDL_Delay(2);
+            SDL_RenderPresent(renderer);
+        }
     }
+    if(!delay){
+        SDL_RenderPresent(renderer);
+    }
+}
+
+void drawBtns(){
+    SDL_SetRenderDrawColor(renderer, 172, 169, 169, 255);
+    SDL_RenderFillRect(renderer, &resetBtn);
+    SDL_RenderFillRect(renderer, &randomizeBtn);
+    SDL_RenderFillRect(renderer, &bubblesortBtn);
+    SDL_RenderFillRect(renderer, &insertionsortBtn);
+    SDL_RenderFillRect(renderer, &selectionsortBtn);
+    SDL_RenderFillRect(renderer, &mergesortBtn);
+    SDL_RenderFillRect(renderer, &quicksortBtn);
+
     SDL_RenderPresent(renderer);
 }
 
@@ -291,81 +312,76 @@ void close(){
     SDL_DestroyRenderer(renderer);
     renderer = NULL;
     SDL_Quit();
+    exit(1);
 }
 
 int main(int argc, char** argv){
     
-    if(!launch()){exit(1);}
-
-    SDL_Event windowEvent;
-
+    if(!launch()){close();}
     randomize();
-    
-    // represents introduction of vector that is to be sorted
-    drawVector();
+    drawVector(-1,-1,-1, true);
     SDL_Delay(1000);
-
-    bubble_sort();
-
-    drawVector();
-    SDL_Delay(1000);
-    reset();
-
-    insertion_sort();
-
-    drawVector();
-    SDL_Delay(1000);
-    reset();
-
-    selection_sort();
-
-    drawVector();
-    SDL_Delay(1000);
-    reset();
-
-    merge_sort(0, capacity-1);
-
-    drawVector();
-    SDL_Delay(1000);
-    reset();
-
-    quick_sort(0, capacity-1);
-
-    drawVector();
-    SDL_Delay(1000);
-    reset();
 
     /* Steps to Visualize:
-    Must show swaps in real time to show algorithm's progression
-
-    Must highlight compared values to show algorithm
-
-    Eventually add buttons to activate each sorting algorithm by user input
-    (might involve OOP class to abstract button functionality)
-    Buttons include: Reset, Randomize, and current 5 programmed sorting algos
-
     maybe add sound pitched to the height of the values to add interactivity?
     */
+    
+    SDL_Event windowEvent;
+    SDL_Point mousePosition;
 
     while(true){
         if(SDL_PollEvent (&windowEvent)){
             if(SDL_QUIT == windowEvent.type){
                 break;
             }
+            mousePosition.x = windowEvent.motion.x; 
+            mousePosition.y = windowEvent.motion.y;
+
+            if (SDL_PointInRect(&mousePosition, &resetBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                reset();
+                drawVector(-1,-1,-1,true);
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &randomizeBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                randomize();
+                drawVector(-1,-1,-1,true);
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &bubblesortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                bubble_sort();
+                drawVector();
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &insertionsortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                insertion_sort();
+                drawVector();
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &selectionsortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                selection_sort();
+                drawVector();
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &mergesortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                merge_sort(0, capacity-1);
+                drawVector();
+                SDL_Delay(100);
+            }
+
+            if (SDL_PointInRect(&mousePosition, &quicksortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
+                quick_sort(0, capacity-1);
+                drawVector();
+                SDL_Delay(100);
+            }
+
+            drawBtns();
         }
     }
-    
-    // print(std::cout);
-    // sort.randomize();
-    // sort.print(std::cout);
-    // sort.built_in_sort();
-    // sort.print(std::cout);
-    
-    // sort.reset();
-    // sort.bubble_sort();
-    // sort.print(std::cout);
-
     close();
-
     return EXIT_SUCCESS;
 }
