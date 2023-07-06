@@ -183,7 +183,7 @@ void print(std::ostream &os){
 void randomize(){
     srand (time(NULL));
     for(int i = 0; i < capacity; i++){
-        vec[i] = (rand() % 200) + 5;
+        vec[i] = (rand() % 375) + 5;
     }
     vec_reset = vec;
 }
@@ -245,26 +245,51 @@ void close(){
 
 int main(int argc, char** argv){
     
-    if(!launch()){
-        exit(1);
-    }
+    if(!launch()){exit(1);}
 
     SDL_Event windowEvent;
 
     SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
     SDL_RenderClear(renderer);
-
     
     randomize();
+    
+    // represents introduction of vector that is to be sorted
     int i = 50;
     for(int j = 0; j < vec.size(); j++){
-        SDL_Rect rect={i+50, 300, rectSize, vec[j]*-1};
+        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderDrawRect(renderer, &rect);
         i+=rectSize*2;
-        SDL_Delay(10);
+        SDL_Delay(30);
         SDL_RenderPresent(renderer);
     }
+
+    SDL_SetRenderDrawColor(renderer, 50, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    bubble_sort();
+
+    i = 50;
+    for(int j = 0; j < vec.size(); j++){
+        SDL_Rect rect={i+50, 400, rectSize, vec[j]*-1};
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderDrawRect(renderer, &rect);
+        i+=rectSize*2;
+        SDL_Delay(30);
+        SDL_RenderPresent(renderer);
+    }
+
+    /* Steps to Visualize:
+    Must show swaps in real time to show algorithm's progression
+
+    Must highlight compared values to show algorithm
+
+    Eventually add buttons to activate each sorting algorithm by user input
+    (might involve OOP class to abstract button functionality)
+    Buttons include: Reset, Randomize, and current 5 programmed sorting algos
+
+    maybe add sound pitched to the height of the values to add interactivity?
+    */
 
     while(true){
         if(SDL_PollEvent (&windowEvent)){
