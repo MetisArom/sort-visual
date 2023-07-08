@@ -54,13 +54,57 @@ void drawVector(int idx1=-1, int idx2=-1, int idx3=-1, bool delay = false){
 
 void drawBtns(){
     SDL_SetRenderDrawColor(renderer, 172, 169, 169, 255);
-    SDL_RenderFillRect(renderer, &resetBtn);
-    SDL_RenderFillRect(renderer, &randomizeBtn);
-    SDL_RenderFillRect(renderer, &bubblesortBtn);
-    SDL_RenderFillRect(renderer, &insertionsortBtn);
-    SDL_RenderFillRect(renderer, &selectionsortBtn);
-    SDL_RenderFillRect(renderer, &mergesortBtn);
-    SDL_RenderFillRect(renderer, &quicksortBtn);
+    SDL_RenderDrawRect(renderer, &resetBtn);
+    SDL_RenderDrawRect(renderer, &randomizeBtn);
+    SDL_RenderDrawRect(renderer, &bubblesortBtn);
+    SDL_RenderDrawRect(renderer, &insertionsortBtn);
+    SDL_RenderDrawRect(renderer, &selectionsortBtn);
+    SDL_RenderDrawRect(renderer, &mergesortBtn);
+    SDL_RenderDrawRect(renderer, &quicksortBtn);
+
+    SDL_Surface* image;
+    image = SDL_LoadBMP("./.assets/resetBtn.bmp");
+    SDL_Texture* img_tex;
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &resetBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/randomizeBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &randomizeBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/bubbleBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &bubblesortBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/insertionBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &insertionsortBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/selectionBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &selectionsortBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/mergeBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &mergesortBtn);
+    SDL_DestroyTexture(img_tex);
+
+    image = SDL_LoadBMP("./.assets/quickBtn.bmp");
+    img_tex = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+    SDL_RenderCopy(renderer, img_tex, NULL, &quicksortBtn);
+    SDL_DestroyTexture(img_tex);
 
     SDL_RenderPresent(renderer);
 }
@@ -288,7 +332,7 @@ bool launch(){
         return false;
     }
     else{
-        std::cout << "SDL is read to go \n";
+        std::cout << "SDL is ready to go \n";
         window = SDL_CreateWindow("My Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
         if ( window == NULL ) {
@@ -320,6 +364,7 @@ int main(int argc, char** argv){
     if(!launch()){close();}
     randomize();
     drawVector(-1,-1,-1, true);
+    drawBtns();
     SDL_Delay(1000);
 
     /* Steps to Visualize:
@@ -340,48 +385,54 @@ int main(int argc, char** argv){
             if (SDL_PointInRect(&mousePosition, &resetBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 reset();
                 drawVector(-1,-1,-1,true);
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &randomizeBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 randomize();
                 drawVector(-1,-1,-1,true);
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &bubblesortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 bubble_sort();
                 drawVector();
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &insertionsortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 insertion_sort();
                 drawVector();
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &selectionsortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 selection_sort();
                 drawVector();
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &mergesortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 merge_sort(0, capacity-1);
                 drawVector();
+                drawBtns();
                 SDL_Delay(100);
             }
 
             if (SDL_PointInRect(&mousePosition, &quicksortBtn) && SDL_GetMouseState(NULL, NULL) == 1) {
                 quick_sort(0, capacity-1);
                 drawVector();
+                drawBtns();
                 SDL_Delay(100);
             }
-
-            drawBtns();
         }
     }
+
     close();
     return EXIT_SUCCESS;
 }

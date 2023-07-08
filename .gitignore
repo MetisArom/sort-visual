@@ -68,8 +68,9 @@ Icon
 
 #SDL2 src files
 .src/
-.assets/
 
+# Program Release File:
+!driver.exe
 
 ########################################
 ## Xcode
