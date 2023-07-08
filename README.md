@@ -58,7 +58,7 @@ Folder including all MS Paint button designs that show up in the project.
 * Learned about pseudorandom number generators to create a shuffle button for interactivity.
 
 ### Project To Do List:
-* Refactor buttons into a class to reduce use of globals and cody copying.
+* Refactor buttons into a class to reduce use of globals and code copying.
 * Implement sound to the program based on the value of the current vector element.
 * Debug issue where clicking off screen during a sort or attempting to stop a sort
   causes program to freeze and crash. Additionally, add a way for user to quit out

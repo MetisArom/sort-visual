@@ -333,7 +333,7 @@ bool launch(){
     }
     else{
         std::cout << "SDL is ready to go \n";
-        window = SDL_CreateWindow("My Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+        window = SDL_CreateWindow("Sorting Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                               SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
         if ( window == NULL ) {
             std::cout << "Window could not be created: " << SDL_GetError() << "\n";
