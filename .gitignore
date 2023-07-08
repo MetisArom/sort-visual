@@ -68,6 +68,7 @@ Icon
 
 #SDL2 src files
 .src/
+unit_test_framework.h
 
 # Program Release File:
 !driver.exe
